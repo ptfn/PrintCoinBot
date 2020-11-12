@@ -1,38 +1,49 @@
-import os, telebot, requests, datetime
+import os, telebot, requests, schedule, time, threading
 
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
 r = requests.get('https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice')
 data = r.json()
 coins = ['btc','eth','xmr','grin']
+message_id = []
+# file_id = open("id.txt",'a+',encoding ='utf-8')
 
 def price_coin(arr):
     string = ''
     for i in range(len(arr)):
         price = data ['datas']['usd'][arr[i]]
-        string = string + arr[i] + ':' + price + '$' +'\n'
+        string_coin = arr[i]
+        string = string + string_coin.upper() + ':' + price + '$' +'\n'
     return string
 
 def lists_coin(arr):
     string = ''
     for i in range(len(arr)):
-        string = string + arr[i] + '\n'
+        string = string + arr[i] + ' '
     return  string
 
 @bot.message_handler(commands=['start'])
-def add_coin(message):
-    bot.send_message(message.chat.id,'This bot is for sending the price of a cryptocurrency. It sends it at 10, 14, 18 and 22 hours. List coin:btc, eth, xmr.')
-    
+def welcome(message):
+    bot.send_message(message.chat.id,'This bot is for sending the price of a cryptocurrency. It sends it at 10, 13, 16, 19 and 22 hours. List coin:' + lists_coin(coins) + '.')
+    message_id.append(message.chat.id)
+    # file_id.write('{}\n'.format(message.chat.id))
+
+def print_coin():
+    for i in range(len(message_id)):
+        bot.send_message(message_id[i], 'Coins:\n' + price_coin(coins))
+        
+def run_func():   
+    schedule.every().day.at("10:00").do(print_coin)
+    schedule.every().day.at("13:00").do(print_coin)
+    schedule.every().day.at("16:00").do(print_coin)
+    schedule.every().day.at("19:00").do(print_coin)
+    schedule.every().day.at("22:00").do(print_coin)
+
     while True:
-        time = datetime.datetime.now()
-        if time.hour == 10 and time.minute == 00 and time.second == 00 and time.microsecond == 000000:
-            bot.send_message(message.chat.id, 'Coins:\n' + price_coin(coins))
-        elif time.hour == 13 and time.minute == 00 and time.second == 00 and time.microsecond == 000000:
-            bot.send_message(message.chat.id, 'Coins:\n' + price_coin(coins))
-        elif time.hour == 16 and time.minute == 00 and time.second == 00 and time.microsecond == 000000:
-            bot.send_message(message.chat.id, 'Coins:\n' + price_coin(coins))
-        elif time.hour == 19 and time.minute == 00 and time.second == 00 and time.microsecond == 000000:
-            bot.send_message(message.chat.id, 'Coins:\n' + price_coin(coins))
-        elif time.hour == 22 and time.minute == 00 and time.second == 00 and time.microsecond == 000000:
-            bot.send_message(message.chat.id, 'Coins:\n' + price_coin(coins))
-            
+        schedule.run_pending()
+        time.sleep(1)
+
+th = threading.Thread(target = run_func, args = ())
+th.start()
+
 bot.polling()
+# file_id.close() 
