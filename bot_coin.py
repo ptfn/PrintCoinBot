@@ -1,4 +1,4 @@
-import os, telebot, requests, schedule, time, threading
+import os, telebot, requests, schedule, time, threading, datetime
 
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
 r = requests.get('https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice')
@@ -12,7 +12,7 @@ def price_coin(arr):
     for i in range(len(arr)):
         price = data ['datas']['usd'][arr[i]]
         string_coin = arr[i]
-        string = string + string_coin.upper() + ':' + price + '$' +'\n'
+        string = string + string_coin.upper() + ': ' + price + '$' +'\n'
     return string
 
 def lists_coin(arr):
@@ -21,15 +21,22 @@ def lists_coin(arr):
         string = string + arr[i] + ' '
     return  string
 
+def print_date():
+    date = ''
+    today = datetime.date.today()
+    date = 'Date: {}.{}.{}\n'.format(today.day,today.month,today.year)
+    return date
+
 @bot.message_handler(commands=['start'])
 def welcome(message):
     bot.send_message(message.chat.id,'This bot is for sending the price of a cryptocurrency. It sends it at 10, 13, 16, 19 and 22 hours. List coin:' + lists_coin(coins) + '.')
-    message_id.append(message.chat.id)
+    if message.chat.id not in message_id:
+        message_id.append(message.chat.id)
     # file_id.write('{}\n'.format(message.chat.id))
 
 def print_coin():
     for i in range(len(message_id)):
-        bot.send_message(message_id[i], 'Coins:\n' + price_coin(coins))
+        bot.send_message(message_id[i], 'Coins:\n' + price_coin(coins) + print_date())
         
 def run_func():   
     schedule.every().day.at("10:00").do(print_coin)
