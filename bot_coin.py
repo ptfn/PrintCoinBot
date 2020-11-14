@@ -1,13 +1,13 @@
 import os, telebot, requests, schedule, time, threading, datetime
 
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
-r = requests.get('https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice')
-data = r.json()
 coins = ['btc','eth','xmr','grin']
 message_id = []
 # file_id = open("id.txt",'a+',encoding ='utf-8')
 
 def price_coin(arr):
+    r = requests.get('https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice')
+    data = r.json()
     string = ''
     for i in range(len(arr)):
         price = data ['datas']['usd'][arr[i]]
