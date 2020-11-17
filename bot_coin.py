@@ -1,9 +1,13 @@
 import os, telebot, requests, schedule, time, threading, datetime
 
+#--Variables--
+
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
 coins = ['btc','eth','xmr','grin']
 message_id = []
 # file_id = open("id.txt",'a+',encoding ='utf-8')
+
+#--Function--
 
 def price_coin(arr):
     r = requests.get('https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice')
@@ -26,6 +30,8 @@ def print_date():
     today = datetime.date.today()
     date = 'Date: {}.{}.{}\n'.format(today.day,today.month,today.year)
     return date
+
+#--Bot/Send Message-- 
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
