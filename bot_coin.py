@@ -3,7 +3,7 @@ import os, telebot, requests, schedule, time, threading, datetime
 #--Variables--
 
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
-coins = ['btc', 'eth', 'etc', 'xmr', 'ltc', 'ksm', 'dot', 'grin']
+coins = ['btc', 'eth', 'etc', 'xmr', 'ltc', 'dot', 'grin']
 message_id = []
 # file_id = open("id.txt",'a+',encoding ='utf-8')
 
