@@ -55,5 +55,5 @@ def run_func():
 th = threading.Thread(target = run_func, args = ())
 th.start()
 
-bot.polling()
+bot.polling(True)
 # file_id.close() 
