@@ -55,5 +55,13 @@ def run_func():
 th = threading.Thread(target = run_func, args = ())
 th.start()
 
-bot.polling(True)
-# file_id.close() 
+def telegram_polling():
+    try:
+        bot.polling(none_stop=True, timeout=60)
+    except:
+        bot.stop_polling()
+        time.sleep(10)
+        telegram_polling()
+# file_id.close()
+
+telegram_polling() 
