@@ -25,7 +25,8 @@ def lists_coin(arr):
         string = string + arr[i] + ' '
     return  string
 
-def print_date(today = datetime.date.today()):
+def print_date():
+    today = datetime.date.today()
     return 'Date: {}.{}.{}\n'.format(today.day,today.month,today.year)
 
 #--Bot/Send Message-- 
