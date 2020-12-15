@@ -3,7 +3,7 @@ import os, telebot, requests, schedule, time, threading, datetime
 #--Variables--
 
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
-coins = ['btc', 'eth', 'etc', 'xmr', 'ltc', 'dot', 'grin']
+coins = ['btc', 'eth', 'xmr', 'ltc', 'etc', 'dot', 'grin']
 message_id = []
 # file_id = open("id.txt",'a+',encoding ='utf-8')
 
@@ -29,7 +29,7 @@ def print_date():
     today = datetime.date.today()
     return 'Date: {}.{}.{}\n'.format(today.day,today.month,today.year)
 
-#--Bot/Send Message-- 
+#--Bot/Send Message--
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
@@ -41,8 +41,8 @@ def welcome(message):
 def print_coin():
     for i in range(len(message_id)):
         bot.send_message(message_id[i], 'Coins:\n' + price_coin(coins) + print_date())
-        
-def run_func():   
+
+def run_func():
     schedule.every().day.at("10:00").do(print_coin)
     schedule.every().day.at("13:00").do(print_coin)
     schedule.every().day.at("16:00").do(print_coin)
@@ -65,4 +65,4 @@ def telegram_polling():
         telegram_polling()
 # file_id.close()
 
-telegram_polling() 
+telegram_polling()
