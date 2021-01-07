@@ -1,39 +1,45 @@
-import os, telebot, requests, schedule, time, threading, datetime
+import os
+import telebot
+import requests
+import schedule
+import time
+import threading
+import datetime
 
-#--Variables--
+# --Variables--
 
-bot = telebot.TeleBot(token = os.getenv('TOKEN'))
+bot = telebot.TeleBot(token=os.getenv('TOKEN'))
 coins = ['btc', 'eth', 'xmr', 'ltc', 'etc', 'dot', 'grin']
 message_id = []
 # file_id = open("id.txt",'a+',encoding ='utf-8')
 
-#--Function--
+# --Function--
 
 def price_coin(arr):
     r = requests.get('https://www.bw.com/exchange/config/controller/website/pricecontroller/getassistprice')
     data = r.json()
     string = ''
     for i in range(len(arr)):
-        price = data ['datas']['usd'][arr[i]]
+        price = data['datas']['usd'][arr[i]]
         string_coin = arr[i]
-        string = string + string_coin.upper() + ': ' + price + '$' +'\n'
+        string = string + string_coin.upper() + ': ' + price + '$' + '\n'
     return string
 
 def lists_coin(arr):
     string = ''
     for i in range(len(arr)):
         string = string + arr[i] + ' '
-    return  string
+    return string
 
 def print_date():
     today = datetime.date.today()
-    return 'Date: {}.{}.{}\n'.format(today.day,today.month,today.year)
+    return 'Date: {}.{}.{}\n'.format(today.day, today.month, today.year)
 
-#--Bot/Send Message--
+# --Bot/Send Message--
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
-    bot.send_message(message.chat.id,'This bot is for sending the price of a cryptocurrency. It sends it at 10, 13, 16, 19 and 22 hours. List coin:' + lists_coin(coins) + '.')
+    bot.send_message(message.chat.id, 'This bot is for sending the price of a cryptocurrency. It sends it at 10, 13, 16, 19 and 22 hours. List coin:' + lists_coin(coins) + '.')
     if message.chat.id not in message_id:
         message_id.append(message.chat.id)
     # file_id.write('{}\n'.format(message.chat.id))
@@ -53,7 +59,7 @@ def run_func():
         schedule.run_pending()
         time.sleep(1)
 
-th = threading.Thread(target = run_func, args = ())
+th = threading.Thread(target=run_func, args=())
 th.start()
 
 def telegram_polling():
