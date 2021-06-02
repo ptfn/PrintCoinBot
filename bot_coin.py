@@ -25,11 +25,13 @@ def price_coin(arr):
         string = string + string_coin.upper() + ': ' + price + '$' + '\n'
     return string
 
+
 def lists_coin(arr):
     string = ''
     for i in range(len(arr)):
         string = string + arr[i] + ' '
     return string
+
 
 def print_date():
     today = datetime.date.today()
@@ -44,9 +46,11 @@ def welcome(message):
         message_id.append(message.chat.id)
     # file_id.write('{}\n'.format(message.chat.id))
 
+
 def print_coin():
     for i in range(len(message_id)):
         bot.send_message(message_id[i], 'Coins:\n' + price_coin(coins) + print_date())
+
 
 def run_func():
     schedule.every().day.at("10:00").do(print_coin)
@@ -55,12 +59,14 @@ def run_func():
     schedule.every().day.at("19:00").do(print_coin)
     schedule.every().day.at("22:00").do(print_coin)
 
+
     while True:
         schedule.run_pending()
         time.sleep(1)
 
 th = threading.Thread(target=run_func, args=())
 th.start()
+
 
 def telegram_polling():
     try:
